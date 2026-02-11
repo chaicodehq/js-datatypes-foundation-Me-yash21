@@ -52,20 +52,66 @@
  */
 export function parseFare(fareString) {
   // Your code here
+  let result = parseFloat(fareString);
+  if(Number.isNaN(result) || typeof fareString !== "string"){
+    return -1;
+  }
+  return result;
+  
 }
 
 export function roundFare(amount, decimalPlaces) {
-  // Your code here
+  // Your code 
+  // return "" if amount is not a number or decimalPlaces is negative or decimalPlace is not a integer
+  if(typeof amount !== "number" || decimalPlaces < 0 || !Number.isInteger(decimalPlaces)){
+    return ""
+  }
+  return amount.toFixed(decimalPlaces);
 }
 
 export function calculateSurge(baseFare, surgeMultiplier) {
-  // Your code here
+  // Your code 
+  // return 0 if baseFare or surgeMultiplier is negative number
+  if(baseFare < 0 || surgeMultiplier < 0){
+    return 0;
+  }
+
+  // return 0 for non-numbers input
+  if(typeof baseFare !== "number" || typeof surgeMultiplier !== "number"){
+    return 0;
+  }
+  return Math.ceil(baseFare * surgeMultiplier)
 }
 
 export function findCheapestAndCostliest(...fares) {
   // Your code here
+  let validNumberFares = [];
+  fares.forEach((fare)=>{
+    // fare should a valid number and not be a negative.
+    if(typeof fare === "number" && fare >=0){ 
+      validNumberFares.push(fare)
+    }  
+  })
+
+  // if there is not a valid number then return null.
+  if(validNumberFares.length === 0){
+    return null
+  }
+
+  let cheapest = Math.min(...validNumberFares);
+  let costliest = Math.max(...validNumberFares);
+
+  return {cheapest, costliest};
 }
 
 export function getDistanceDifference(from, to) {
   // Your code here
+  let from_parse = parseInt(from);
+  let to_parse = parseInt(to);
+
+  if(Number.isNaN(from_parse) || Number.isNaN(to_parse)){
+    return -1;
+  }
+
+  return Math.abs(to_parse - from_parse);
 }
