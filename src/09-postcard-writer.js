@@ -53,20 +53,59 @@
  */
 export function writePostcard(sender, receiver, message) {
   // Your code here
+  let params = [sender,receiver,message];
+
+  if(params.some((param)=> typeof param !== "string" || param.trim() === "")){
+    return "";
+  }
+  let postcard = `Priy ${receiver},\n\n${message}\n\nAapka/Aapki,\n${sender}`
+  return postcard;
 }
 
 export function isValidPincode(code) {
   // Your code here
+  if(typeof code !== "string"){
+    return false;
+  }
+  if(code.startsWith("0") || code.length !== 6){
+    return false;
+  }
+
+  let matchResult = code.match(/^\d+$/);
+  // matchResult is null then return false (!null)
+  if(!matchResult){
+    return false;
+  }
+  return true;
 }
 
 export function formatPostcardField(label, value, width) {
   // Your code here
+  if(typeof label !== "string" || typeof value !== "string"){
+    return "";
+  }
+  
+  let padLength = (width) ? width : 12 ;
+  return label.padEnd(padLength) +": "+ value
 }
 
 export function isFromState(address, stateCode) {
   // Your code here
+  if(typeof address !== "string" || typeof stateCode !== "string"){
+    return false;
+  }
+  return address.endsWith(stateCode);
 }
 
 export function countVowels(message) {
   // Your code here
+  if(typeof message !== "string"){
+    return 0;
+  }
+  let matchResult = message.match(/[aeiouAEIOU]/g)
+  // if matchResult is null (means there is no vowel in stirng) then return 0
+  if(!matchResult){
+    return 0
+  }
+  return matchResult.length
 }

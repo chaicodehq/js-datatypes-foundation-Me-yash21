@@ -54,16 +54,105 @@
  */
 export function createThaliDescription(thali) {
   // Your code here
+  // if thali is not object , or a null ,then return ""
+  if(typeof thali !== "object" || Array.isArray(thali) || thali === null){
+    return "";
+  }
+  
+  let thaliName = thali.name;
+  let thaliItems = thali.items;
+  let thaliPrice = thali.price;
+  // if required files are empty then return null
+  if(thaliName.trim() === "" || thaliItems === undefined || thaliItems.length === 0 ||  !thaliPrice){
+    return ""
+  }
+
+  return `${thaliName.toUpperCase()} (${(thali.isVeg)?"Veg":"Non-Veg"}) - Items: ${thaliItems.join(", ")} - Rs.${thaliPrice.toFixed(2)}`
 }
 
 export function getThaliStats(thalis) {
   // Your code here
+  if(!Array.isArray(thalis) || thalis.length === 0){
+    return null
+  }
+
+  let thaliStats = {}
+  thaliStats.totalThalis = thalis.length;
+  // veg and non-veg thalis object array
+  let vegThalis = thalis.filter((thali)=> thali.isVeg)
+  let non_VegThalis = thalis.filter((thali)=> !thali.isVeg);
+  thaliStats.vegCount = vegThalis.length;
+  thaliStats.nonVegCount = non_VegThalis.length;
+
+  // averagePrice of thali
+  let totalSumOfPrices = thalis.reduce((acc,thali)=>( acc + thali.price ),0);
+  thaliStats.avgPrice = (totalSumOfPrices/thalis.length).toFixed(2);
+
+  // array of the prices of all thalis
+  let thaliPrices = thalis.map((thali)=> thali.price);
+  thaliStats.cheapest = Math.min(...thaliPrices)
+  thaliStats.costliest = Math.max(...thaliPrices)
+
+  // all names of the thalis
+  let thaliNames = thalis.map((thali)=> thali.name )
+  thaliStats.names = [...thaliNames];
+
+
+  return thaliStats
 }
 
 export function searchThaliMenu(thalis, query) {
   // Your code here
+  if(!Array.isArray(thalis) || thalis.length === 0 || typeof query !== "string"){
+    return [];
+  }
+
+  let resultThalis = thalis.filter((thali)=>{
+    let thaliName = thali.name;
+    thaliName = thaliName.trim().toLowerCase();
+
+    let queryInLowerCase = query.trim().toLowerCase()
+    if(thaliName === queryInLowerCase ||thaliName.includes(queryInLowerCase) ){
+      return true;
+    }
+
+    let thaliItems = thali.items;
+    //check that is there query in thali items. 
+    // first we check that is query as it is  in items or not
+    if(thaliItems.includes(queryInLowerCase)){
+      return true;
+    }
+
+    // now check each item of thali items that, does it contain the query  stirng
+    for(let i = 0; i<thaliItems.length;i++){
+      let currentItem = thaliItems[i]
+      if(currentItem.includes(queryInLowerCase))
+        return true;
+    }
+
+    return false;
+  })
+
+  return resultThalis;
 }
 
 export function generateThaliReceipt(customerName, thalis) {
   // Your code here
+  if(typeof customerName !== "string" || !Array.isArray(thalis) || thalis.length === 0){
+    return ""
+  }
+
+  let lineItemsArr = thalis.map((thali)=>{
+    let thaliName  = thali.name;
+
+    return `- ${thaliName} x Rs.${thali.price}`
+  })
+
+  let total = thalis.reduce((acc,thali)=>(acc + thali.price),0);
+  let itemsCount = thalis.length;
+
+  let billFormat = `THALI RECEIPT\n---\nCustomer: ${customerName.toUpperCase()}\n${lineItemsArr.join("\n")}\n---\nTotal: Rs.${total}\nItems: ${itemsCount}`
+
+  return billFormat
+
 }

@@ -54,20 +54,52 @@
  */
 export function getFamilyNames(registry) {
   // Your code here
+  if(typeof registry !== "object" || Array.isArray(registry) || registry === null){
+    return [];
+  }
+  let cardIds = Object.keys(registry);
+  return cardIds;
 }
 
 export function getAllFamilies(registry) {
   // Your code here
+  if(typeof registry !== "object" || Array.isArray(registry) || registry === null){
+    return [];
+  }
+  let allFamilies = Object.values(registry);
+  return allFamilies;
 }
 
 export function getRationCardEntries(registry) {
   // Your code here
+  if(typeof registry !== "object" || Array.isArray(registry) || registry === null){
+    return [];
+  }
+  let cardEntries = Object.entries(registry);
+  return cardEntries;
 }
 
 export function hasRationCard(registry, cardId) {
   // Your code here
+  if(typeof registry !== "object" || Array.isArray(registry) || registry === null || typeof cardId !== "string"){
+    return false;
+  }
+  
+  return registry.hasOwnProperty(cardId)
 }
 
 export function removeRationCard(registry, cardId) {
   // Your code here
+  if(typeof registry !== "object" || Array.isArray(registry) || registry === null || typeof cardId !== "string"){
+    return false;
+  }
+  
+  if(registry.hasOwnProperty(cardId)){
+    delete registry[cardId];
+    return true;
+  }
+  else{
+    return false;
+  }
 }
+
